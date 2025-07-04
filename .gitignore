@@ -21,6 +21,7 @@ Thumbs.db                # Windows specific
 data/raw_complaints.csv  # Optionally ignore raw data if too large for Git
 data/*.zip
 data/*.gz
+data/*.csv
 
 # Vector Store - typically large binary files
 vector_store/
