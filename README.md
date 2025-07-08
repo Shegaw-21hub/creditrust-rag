@@ -102,11 +102,60 @@ Detailed instructions will be added here for each task as the project progresses
 
 ---
 
-## Key Deliverables & Tasks (Summary)
-- **Task 1: EDA & Preprocessing:** Cleaned dataset (`data/filtered_and_cleaned_complaints.csv`).
-- **Task 2: Embedding & Vector Store:** Persisted vector index (`vector_store/faiss_index.bin`, `vector_store/metadata.json`).
-- **Task 3: RAG Core & Evaluation:** RAG pipeline (`src/rag_pipeline.py`), evaluation table (`reports/evaluation_table.md`).
-- **Task 4: Interactive UI:** Gradio/Streamlit app (`src/app.py`), UI screenshots (`screenshots/`).
+
+### Task 3: Building the RAG Core Logic and Evaluation
+**Objective:** To build the retrieval and generation pipeline and, most importantly, to evaluate its effectiveness.
+
+**Implementation Details:**
+* **Retriever Implementation:**
+    * Created a function that takes a user's question (string) as input.
+    * Embeds the question using the same model from Task 2.
+    * Performs a similarity search against the vector store to retrieve the top-k (k=5) most relevant text chunks.
+* **Prompt Engineering:**
+    * Designed a robust prompt template to guide the LLM. The template instructs the model to act as a helpful analyst, use only the provided context, and answer the user's question based on that context.
+    * *Example Template:*
+        ```
+        You are an AI assistant specialized in providing information about credit scores and financial literacy.
+        Answer the question based only on the following context, which contains information about credit scores, credit reports, and financial advice.
+        If the answer cannot be found in the context, politely state that you don't have enough information.
+
+        Context: {context}
+        Question: {question}
+        Answer:
+        ```
+* **Generator Implementation:**
+    * Combined the prompt, the user question, and the retrieved chunks into a cohesive input.
+    * Sent the combined input to an LLM (e.g., using Hugging Face's pipeline via LangChain).
+    * Returns the LLM's generated response.
+* **Evaluation:**
+    * **Quantitative Evaluation:** Integrated advanced evaluation metrics using `Ragas` (for faithfulness, answer relevancy, context recall, context precision) and `DeepEval` (for faithfulness, answer relevancy, context recall). This provides objective scores for pipeline performance.
+    * **Qualitative Evaluation:** Prepared a list of 5-10 representative questions to manually assess the system's responses and retrieved sources.
+
+**Deliverables:**
+* Jupyter Notebook: `notebooks/03_rag_core_evaluation.ipynb` (for executing the pipeline and running evaluations)
+* Python Module: `src/rag_pipeline.py` (containing the core RAG pipeline logic)
+* Evaluation Results: Quantitative metric outputs within the notebook, and a qualitative evaluation table (to be created manually in the final report based on notebook output).
+
+---
+
+### Task 4: Creating an Interactive Chat Interface
+**Objective:** To build a user-friendly interface that allows non-technical users to interact with your RAG system.
+
+**Implementation Details:**
+* **Framework:** Utilized Gradio to build the web interface, chosen for its simplicity and rapid prototyping capabilities.
+* **Core Functionality:** The interface includes:
+    * A text input box for the user to type their question.
+    * A "Ask CrediTrust" button to submit the query.
+    * A display area for the AI-generated answer.
+* **Enhancing Trust and Usability (Key Requirements):**
+    * **Display Sources:** Below the generated answer, the source text chunks that the LLM used are clearly displayed, crucial for user trust and verification.
+    * **Streaming:** Implemented response streaming where the answer appears token-by-token, significantly improving the user experience by providing immediate feedback.
+    * **Clear Button:** A "Clear All" button is provided to reset the input and output fields, facilitating new conversations.
+* **Code Quality:** The code is designed to be clean, modular, and the UI is developed to be intuitive for end-users.
+
+**Deliverables:**
+* Python Script: `app.py` (the Gradio application script)
+* UI Screenshots: Screenshots or a GIF of your working application (to be included in your final report).
 
 ---
 Developed for CrediTrust Financial as a Data & AI Engineer.
