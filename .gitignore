@@ -23,8 +23,7 @@ data/*.zip
 data/*.gz
 data/*.csv
 
-# Vector Store - typically large binary files
-vector_store/
+# Vector Store - typically large binary fil
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
